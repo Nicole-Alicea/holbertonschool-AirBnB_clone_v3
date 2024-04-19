@@ -50,7 +50,8 @@ def create_city(state_id):
         abort(400, "Missing name")
     city_data["state_id"] = state_id
     new_city = City(**city_data)
-    new_city.save()
+    storage.new(new_city)  # Agrega el nuevo objeto City al almacén
+    storage.save()  # Guarda los cambios en el almacén
     return jsonify(new_city.to_dict()), 201
 
 
@@ -63,9 +64,13 @@ def update_city(city_id):
     city_data = request.get_json()
     if not city_data:
         abort(400, "Not a JSON")
-    for key in ["id", "state_id", "created_at", "updated_at"]:
-        city_data.pop(key, None)
-    for key, value in city_data.items():
+    
+    # Crear un nuevo diccionario con las claves y valores deseados
+    updated_data = {key: value for key, value in city_data.items() 
+                    if key not in ["id", "state_id", "created_at", "updated_at"]}
+    
+    # Actualizar los atributos del objeto City con el nuevo diccionario
+    for key, value in updated_data.items():
         setattr(city, key, value)
     storage.save()
     return jsonify(city.to_dict()), 200
