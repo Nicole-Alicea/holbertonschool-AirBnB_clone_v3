@@ -90,14 +90,17 @@ class DBStorage:
         return
 
     def count(self, cls=None):
-        """This method will count the number of objects in storage"""
+        """
+        This method will count the number of objects in storage
+        """
         if not cls:
             instance_of_all_cls = self.all()
             return len(instance_of_all_cls)
 
-        if cls in classes.values():
-            instances_of_given_cls = self.all(cls)
-            return len(instances_of_given_cls)
+        for clas, value in classes.items():
+            if cls == clas or cls == value:
+                instances_of_given_cls = self.all(cls)
+                return len(instances_of_given_cls)
 
         if cls not in classes.values():
             return
