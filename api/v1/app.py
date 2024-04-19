@@ -20,7 +20,7 @@ def teardown(exception):
 
 
 @app.errorhandler(404)
-def not_found(error):
+def not_found():
     '''Returns a JSON-formatted 404 status code response'''
 
     response = {'error': 'Not found'}
