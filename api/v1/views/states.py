@@ -17,6 +17,7 @@ def get_all_states():
 
     return jsonify(list_of_states)
 
+
 @app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
 def get_state(state_id):
     '''Retrieves a State object. If a state_id is not linked to any
@@ -28,9 +29,10 @@ def get_state(state_id):
         abort(404)
 
     return jsonify(state.to_dict())
-    
 
-@app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+
+@app_views.route('/states/<state_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def delete_state(state_id):
     '''Deletes a State object'''
 
@@ -38,7 +40,7 @@ def delete_state(state_id):
 
     if not state:
         abort(404)
-    
+
     storage.delete(state)
     storage.save()
 
@@ -51,12 +53,12 @@ def create_state():
 
     if request.content_type != 'application/json':
         abort(400, 'Not a JSON')
-    
+
     data = request.get_json()
 
     if not data:
         abort(400, 'Not a JSON')
-    
+
     if 'name' not in data:
         abort(400, 'Missing name')
 
@@ -72,7 +74,7 @@ def update_state(state_id):
 
     if request.content_type != 'application/json':
         abort(400, 'Not a JSON')
-    
+
     state = storage.get(State, state_id)
 
     if not state:
@@ -90,5 +92,5 @@ def update_state(state_id):
             setattr(state, key, value)
 
     storage.save()
-    
+
     return jsonify(state.to_dict()), 200
