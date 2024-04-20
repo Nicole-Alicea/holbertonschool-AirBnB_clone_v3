@@ -11,14 +11,14 @@ from models.place import Place
 from models.review import Review
 from models.user import User
 
-
+# Define a route to return the status of the API
 @app_views.route('/status')
 def api_status():
     ''' Will return a JSON: "status": "OK" '''
     response = {'status': "OK"}
     return jsonify(response)
 
-
+# Define a route to retrieve the number of each object by type
 @app_views.route('/stats')
 def get_stats():
     '''Retrieves the number of each object by type'''
@@ -30,5 +30,4 @@ def get_stats():
         'states': storage.count(State),
         'users': storage.count(User),
     }
-
     return jsonify(stats)
